@@ -1,0 +1,46 @@
+# Binaries for the project
+kptn
+
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+coverage.out
+
+# Go vendor directory (if using go mod vendor)
+vendor/
+
+# IDEs and editor-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs and debug files
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Builds and generated files
+/build/
+bin/
+kptn
+
+# Temporary files and directories
+tmp/
+*.tmp
+*.bak
+
+# Makefile artifacts
+*.o
+*.a
+*.out
