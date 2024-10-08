@@ -3,6 +3,7 @@ package main
 import (
     "os"
     "github.com/spf13/cobra"
+    ver "github.com/samsond/krypton/cmd/krypton/version"
 )
 
 func main() {
@@ -11,8 +12,8 @@ func main() {
         Short: "kptn is a CLI for managing Kubernetes resources using the Krypton DSL",
     }
 
-    // Add the subcommands to the root command
-    rootCmd.AddCommand(versionCmd)
+    // Add the version command using the alias
+    rootCmd.AddCommand(ver.NewVersionCommand())
     
 
     // Execute the root command

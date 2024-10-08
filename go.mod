@@ -1,4 +1,4 @@
-module krypton
+module github.com/samsond/krypton
 
 go 1.23.1
 
