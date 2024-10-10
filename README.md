@@ -126,7 +126,7 @@ spec:
 
 ## Project Structure
 * cmd/krypton: Contains the main entry point for the kptn CLI.
-* * pkg/parser: Handles the parsing logic for .kp files.
+* pkg/parser: Handles the parsing logic for .kp files.
 * pkg/generator: Contains the logic for converting parsed structures into YAML using templates.
 * pkg/generator/templates: Holds the Go templates used for generating Kubernetes YAML.
 * examples/: Directory containing example .kp files and their corresponding generated YAML files.

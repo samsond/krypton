@@ -1,9 +1,9 @@
 package templates
 
 import (
-    "path/filepath"
+	"path/filepath"
 )
 
 func GetDeploymentTemplatePath() string {
-    return filepath.Join("pkg", "templates", "deployment.tmpl")
+	return filepath.Join("pkg", "templates", "deployment.tmpl")
 }
