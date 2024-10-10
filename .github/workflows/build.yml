@@ -30,5 +30,16 @@ jobs:
       - name: Run tests
         run: make test
 
+      - name: Run go fmt
+        run: go fmt ./...
+
+      - name: Verify go fmt
+        run: |
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "The following files need to be formatted:"
+            gofmt -l .
+            exit 1
+          fi
+
       - name: Verify build
         run: ./kptn version

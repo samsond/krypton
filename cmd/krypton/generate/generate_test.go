@@ -8,7 +8,7 @@ import (
 
 func TestNewGenerateCommand(t *testing.T) {
 
-	// Set the working directory 
+	// Set the working directory
 	err := os.Chdir("../../../")
 	if err != nil {
 		t.Fatalf("failed to change directory: %v", err)
@@ -41,13 +41,12 @@ func TestNewGenerateCommand(t *testing.T) {
 
 	expectedYAML, err := os.ReadFile("examples/deployment.yaml")
 
-    if err != nil {
-        t.Fatalf("failed to read expected YAML file: %v", err)
-    }
-	
+	if err != nil {
+		t.Fatalf("failed to read expected YAML file: %v", err)
+	}
+
 	trimmedExpectedOutput := strings.TrimSpace(string(expectedYAML))
 	trimmedActualOutput := strings.TrimSpace(string(actualOutput))
-
 
 	if trimmedActualOutput != trimmedExpectedOutput {
 		t.Errorf("expected output:\n%s\nbut got:\n%s", trimmedExpectedOutput, trimmedActualOutput)

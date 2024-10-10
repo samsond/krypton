@@ -14,6 +14,10 @@ test:
 	@echo "Running tests..."
 	go test ./...
 
+fmt:
+	@echo "Formatting code..."
+	go fmt ./...
+
 # Tidy up dependencies
 tidy:
 	go mod tidy
