@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Name }}
+  namespace: {{ .Namespace }}
+spec:
+  replicas: {{ .Replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Name }}
+    spec:
+      containers:
+      - name: {{ .Name }}
+        image: {{ .Image }}
+{{- if .Args }}
+        args:
+        {{- range .Args }}
+        - "{{ . }}"
+        {{- end }}
+{{- end }}
+        ports:
+        {{- range $name, $port := .Ports }}
+        - name: "{{ $name }}"
+          containerPort: {{ $port }}
+        {{- end }}
+        env:
+        {{- range $key, $value := .Env }}
+        - name: "{{ $key }}"
+          value: "{{ $value }}"
+        {{- end }}
+{{- if .Resources }}
+        resources:
+          limits:
+            memory: "{{ .Resources.Limits.Memory }}"
+            cpu: "{{ .Resources.Limits.CPU }}"
+          requests:
+            memory: "{{ .Resources.Requests.Memory }}"
+            cpu: "{{ .Resources.Requests.CPU }}"
+{{- end }}
+{{- if .Storage }}
+        volumeMounts:
+        - name: "{{ .Storage.Volume }}"
+          mountPath: /data
+{{- end }}
+      volumes:
+{{- if .Storage }}
+      - name: "{{ .Storage.Volume }}"
+        persistentVolumeClaim:
+          claimName: "{{ .Storage.Volume }}"
+{{- end }}

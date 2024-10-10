@@ -1,0 +1,26 @@
+deploy app "my-app" {
+    namespace: "default";
+    replicas: 3;
+    image: "my-app:v1.0";
+    ports {
+        http: 8080;
+        metrics: 2112;
+    }
+    env {
+        DATABASE_URL: "postgres://user:password@host/db";
+    }
+    resources {
+        limits {
+            memory: "512Mi";
+            cpu: "500m";
+        }
+        requests {
+            memory: "256Mi";
+            cpu: "250m";
+        }
+    }
+    storage {
+        volume: "my-app-data";
+        size: "5Gi";
+    }
+}
