@@ -1,4 +1,4 @@
-deploy app "my-app" {
+deploy app my-app {
     namespace: "default";
     replicas: 3;
     image: "my-app:v1.0";
@@ -23,4 +23,4 @@ deploy app "my-app" {
         volume: "my-app-data";
         size: "5Gi";
     }
-}
+}	

@@ -2,17 +2,29 @@ package generator
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
 	"text/template"
 
-	"github.com/samsond/krypton/pkg/parser"
-	"github.com/samsond/krypton/pkg/templates"
+	"github.com/samsond/krypton/pkg/nodes"
 )
 
-// GenerateFromApp generates Kubernetes YAML manifests from the parsed AppDeployment.
-func GenerateFromApp(app *parser.AppDeployment) (string, error) {
-	tmplPath := templates.GetDeploymentTemplatePath()
-	return generateTemplate(tmplPath, app)
+func GenerateYAML(resource nodes.Node) (string, error) {
+	tmplPath, err := getTemplatePath(resource.NodeType())
+	if err != nil {
+		return "", err
+	}
+	return generateTemplate(tmplPath, resource)
+}
+
+func getTemplatePath(nodeType string) (string, error) {
+	templatePath := filepath.Join("pkg", "templates", nodeType+".tmpl")
+	if _, err := os.Stat(templatePath); os.IsNotExist(err) {
+		return "", errors.New("template not found for nodeType: " + nodeType)
+	}
+	return templatePath, nil
 }
 
 // generateTemplate is a common function to execute a template with the given data.
