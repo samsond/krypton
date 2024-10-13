@@ -3,8 +3,10 @@ package generate
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/samsond/krypton/pkg/generator"
+	"github.com/samsond/krypton/pkg/lexer"
 	"github.com/samsond/krypton/pkg/parser"
 	"github.com/spf13/cobra"
 )
@@ -20,25 +22,36 @@ func NewGenerateCommand() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			dslFilePath := args[0]
 
-			// Parse the DSL into a Resource.
-			resource, err := parser.ParseDSL(dslFilePath)
+			// Initialize the lexer and parser
+			// Read the DSL script from the file
+			rawInput, err := os.ReadFile(dslFilePath)
 			if err != nil {
-				fmt.Fprintf(cmd.OutOrStderr(), "Error parsing DSL: %v\n", err)
+				fmt.Fprintf(cmd.OutOrStderr(), "Error reading DSL file: %v\n", err)
 				os.Exit(1)
 			}
 
-			// Use type assertion or type switch to handle different resource types
-			appDeployment, ok := resource.(*parser.AppDeployment)
-			if !ok {
-				fmt.Fprintf(cmd.OutOrStderr(), "Unsupported resource type: %T\n", resource)
+			// Trim the input DSL script
+			input := strings.TrimSpace(string(rawInput))
+
+			lexer := lexer.NewLexer(input)
+			parser := parser.NewParser(lexer)
+
+			// Parse the DSL into resources
+			resources, err := parser.ParseResources()
+			if err != nil {
+				fmt.Fprintf(cmd.OutOrStderr(), "Error parsing resources: %v\n", err)
 				os.Exit(1)
 			}
 
-			manifests, err := generator.GenerateFromApp(appDeployment)
+			var manifests string
+			for _, resource := range resources {
+				yamlContent, err := generator.GenerateYAML(resource)
+				if err != nil {
+					fmt.Fprintf(cmd.OutOrStderr(), "Error getting template path: %v\n", err)
+					os.Exit(1)
+				}
 
-			if err != nil {
-				fmt.Fprintf(cmd.OutOrStderr(), "Error generating manifests: %v\n", err)
-				os.Exit(1)
+				manifests += yamlContent + "\n---\n"
 			}
 
 			// Write the generated YAML to the specified output file or stdout

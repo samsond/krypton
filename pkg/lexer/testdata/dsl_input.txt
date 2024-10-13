@@ -1,0 +1,31 @@
+deploy app my-app {
+    namespace: "default";
+    replicas: 3;
+    image: "my-image:latest";
+    env {
+        ENV_VAR: "value";
+    }
+    ports {
+        http: 8080;
+    }
+    resources {
+        limits {
+            memory: "512Mi";
+            cpu: "0.5";
+        }
+        requests {
+            memory: "256Mi";
+            cpu: "0.25";
+        }
+    }
+    storage {
+        volume: "my-volume";
+        size: "10Gi";
+    }
+}
+---
+service my-service {
+    namespace: "default";
+    port: 80;
+    targetPort: 8080;
+}

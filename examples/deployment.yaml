@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
+  name: my-app 
   namespace: default
 spec:
-  replicas: 0
+  replicas: 3
   selector:
     matchLabels:
-      app: my-app
+      app: my-app 
   template:
     metadata:
       labels:
-        app: my-app
+        app: my-app 
     spec:
       containers:
-      - name: my-app
-        image: my-app
+      - name: my-app 
+        image: my-app:v1.0
         ports:
         - name: "http"
           containerPort: 8080
@@ -38,3 +38,5 @@ spec:
       - name: "my-app-data"
         persistentVolumeClaim:
           claimName: "my-app-data"
+
+---
