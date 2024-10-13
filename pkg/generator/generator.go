@@ -6,13 +6,19 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 
 	"github.com/samsond/krypton/pkg/nodes"
 )
 
 func GenerateYAML(resource nodes.Node) (string, error) {
-	tmplPath, err := getTemplatePath(resource.NodeType())
+	if resource.NodeType() == "" {
+		return "", errors.New("node type is empty")
+		
+	}
+	nodeType := strings.ToLower(resource.NodeType())
+	tmplPath, err := getTemplatePath(nodeType)
 	if err != nil {
 		return "", err
 	}
@@ -20,7 +26,8 @@ func GenerateYAML(resource nodes.Node) (string, error) {
 }
 
 func getTemplatePath(nodeType string) (string, error) {
-	templatePath := filepath.Join("pkg", "templates", nodeType+".tmpl")
+
+	templatePath := filepath.Join("pkg", "templates", nodeType + ".tmpl")
 	if _, err := os.Stat(templatePath); os.IsNotExist(err) {
 		return "", errors.New("template not found for nodeType: " + nodeType)
 	}
